@@ -20,6 +20,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".view.activity.CategoryActivity"
+            android:label="@string/categories"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="DATABASE"
             android:value="wmma.db" />
@@ -30,7 +36,7 @@
             android:name="QUERY_LOG"
             android:value="true" />
 
-        <activity android:name=".view.activity.CategoryActivity"></activity>
+
     </application>
 
 </manifest>
