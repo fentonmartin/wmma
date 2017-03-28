@@ -26,6 +26,12 @@
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
+        <activity
+            android:name=".view.activity.AddRecordActivity"
+            android:label="@string/addRecord"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <meta-data
             android:name="DATABASE"
             android:value="wmma.db" />

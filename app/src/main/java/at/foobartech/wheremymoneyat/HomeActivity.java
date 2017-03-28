@@ -3,7 +3,6 @@ package at.foobartech.wheremymoneyat;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -16,11 +15,9 @@ import com.google.common.collect.Lists;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
+import at.foobartech.wheremymoneyat.view.activity.AddRecordActivity;
 import at.foobartech.wheremymoneyat.view.activity.CategoryActivity;
 import at.foobartech.wheremymoneyat.view.adapter.RecordAdapter;
 import butterknife.BindView;
@@ -60,19 +57,8 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.add)
     void handleAdd(View view) {
-        Category category;
-        final List<Category> test = Category.find(Category.class, "name = ?", "test");
-        if (test == null || test.size() <= 0) {
-            long testCategory = new Category("test").save();
-            category = Category.findById(Category.class, testCategory);
-        } else {
-            category = test.get(0);
-        }
-
-        new Record(100, new Date(), category).save();
-
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        final Intent intent = new Intent(this, AddRecordActivity.class);
+        this.startActivity(intent);
     }
 
     @Override
