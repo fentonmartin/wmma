@@ -4,12 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="at.foobartech.wheremymoneyat.view.activity.CategoryActivity"
     tools:showIn="@layout/activity_add_record">
 
     <EditText
+        android:id="@+id/tv_amount"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:paddingBottom="20sp"
+        android:paddingEnd="20sp"
+        android:paddingStart="20sp"
+        android:paddingTop="40sp"
+        android:textSize="@dimen/huge_font_size" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20sp" />
+
+    <RadioGroup
+        android:id="@+id/rg_categories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10sp"
+        android:layout_marginStart="10sp"
+        android:orientation="vertical"
+        android:paddingEnd="10sp"
+        android:paddingStart="10sp">
+
+    </RadioGroup>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20sp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10sp"
+        android:layout_marginStart="10sp"
+        android:hint="@string/note"
+        android:inputType="text"
+        android:paddingEnd="10sp"
+        android:paddingStart="10sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20sp" />
+
+    <EditText
+        android:id="@+id/et_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10sp"
+        android:layout_marginStart="10sp"
+        android:hint="Date"
+        android:inputType="none"
+        android:paddingEnd="10sp"
+        android:paddingStart="10sp" />
 
 </LinearLayout>
