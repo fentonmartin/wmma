@@ -5,14 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.rengwuxian.materialedittext.MaterialEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -22,7 +23,6 @@ import at.foobartech.wheremymoneyat.model.Category;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnLongClick;
 
 public class AddRecordActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -31,11 +31,11 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     @BindView(R.id.tv_amount)
     TextView amountTextView;
 
-    @BindView(R.id.rg_categories)
-    RadioGroup rgCategories;
-
     @BindView(R.id.et_date)
-    EditText etDate;
+    MaterialEditText etDate;
+
+    @BindView(R.id.spinner_category)
+    Spinner spinnerCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
 
         ButterKnife.bind(this);
 
@@ -61,14 +61,14 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     private void populate() {
         final Iterator<Category> allCategories = Category.findAll(Category.class);
 
+        final ArrayList<String> items = new ArrayList<>();
         while (allCategories.hasNext()) {
             final Category category = allCategories.next();
-
-            final RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(category.getName());
-            radioButton.setId(category.getId().intValue()); //there will *never* be more thant 2^31 categories
-            rgCategories.addView(radioButton);
+            items.add(category.getName());
         }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinnerCategory.setAdapter(adapter);
     }
 
     @Override

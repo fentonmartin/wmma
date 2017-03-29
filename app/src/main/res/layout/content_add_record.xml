@@ -9,40 +9,40 @@
     tools:context="at.foobartech.wheremymoneyat.view.activity.CategoryActivity"
     tools:showIn="@layout/activity_add_record">
 
-    <EditText
-        android:id="@+id/tv_amount"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:hint="0.00"
-        android:inputType="numberDecimal"
-        android:paddingBottom="20sp"
+        android:paddingBottom="12sp"
         android:paddingEnd="20sp"
         android:paddingStart="20sp"
-        android:paddingTop="40sp"
-        android:textSize="@dimen/huge_font_size" />
+        android:paddingTop="36sp">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/tv_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="0.00"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/huge_font_size"
+            app:met_hideUnderline="true"
+            app:met_textColor="@color/colorAccent" />
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20sp" />
+        android:layout_height="12sp" />
 
-    <RadioGroup
-        android:id="@+id/rg_categories"
+    <Spinner
+        android:id="@+id/spinner_category"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10sp"
-        android:layout_marginStart="10sp"
-        android:orientation="vertical"
-        android:paddingEnd="10sp"
-        android:paddingStart="10sp">
-
-    </RadioGroup>
+        android:layout_height="wrap_content" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20sp" />
+        android:layout_height="12sp" />
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10sp"
@@ -50,21 +50,25 @@
         android:hint="@string/note"
         android:inputType="text"
         android:paddingEnd="10sp"
-        android:paddingStart="10sp" />
+        android:paddingStart="10sp"
+        app:met_floatingLabel="normal"
+        app:met_iconLeft="@drawable/ic_note_black_24dp" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="20sp" />
+        android:layout_height="12sp" />
 
-    <EditText
+    <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/et_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10sp"
         android:layout_marginStart="10sp"
-        android:hint="Date"
+        android:hint="@string/date"
         android:inputType="none"
         android:paddingEnd="10sp"
-        android:paddingStart="10sp" />
+        android:paddingStart="10sp"
+        app:met_floatingLabel="normal"
+        app:met_iconLeft="@drawable/ic_today_black_24dp" />
 
 </LinearLayout>
