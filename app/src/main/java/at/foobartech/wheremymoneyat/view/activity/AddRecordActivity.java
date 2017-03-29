@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -37,6 +38,9 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     @BindView(R.id.spinner_category)
     Spinner spinnerCategory;
 
+    @BindView(R.id.et_note)
+    MaterialEditText etNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,20 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
         super.onResume();
         populate();
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_done:
+
+                double amount = Double.parseDouble(amountTextView.getText().toString());
+                String note = etNote.getText().toString();
+
+                break;
+        }
+        return true;
+    }
+
 
     private void populate() {
         final Iterator<Category> allCategories = Category.findAll(Category.class);
