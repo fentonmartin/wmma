@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.model.Record;
-import at.foobartech.wheremymoneyat.model.Tag;
 
 /**
  * @author Thomas Feichtinger
@@ -47,14 +48,13 @@ public class RecordAdapter extends ArrayAdapter<Record> {
         final StringBuilder builder = new StringBuilder();
 
         builder.append(DATE_FORMAT.format(r.getDate()));
+
         builder.append(" | ");
         builder.append(r.getCategory().getName());
-        builder.append(" | ");
-        if (r.getTags() != null) {
-            for (Tag tag : r.getTags()) {
-                builder.append(tag.getName());
-                builder.append(" ");
-            }
+
+        if (!Strings.isNullOrEmpty(r.getNote())) {
+            builder.append(" | ");
+            builder.append(r.getNote());
         }
 
         text2.setText(builder.toString());

@@ -9,10 +9,13 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.common.collect.Lists;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +24,7 @@ import java.util.Iterator;
 
 import at.foobartech.wheremymoneyat.R;
 import at.foobartech.wheremymoneyat.model.Category;
+import at.foobartech.wheremymoneyat.model.Record;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,26 +70,56 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-
-                double amount = Double.parseDouble(amountTextView.getText().toString());
-                String note = etNote.getText().toString();
-
+                createNewRecord();
                 break;
         }
         return true;
     }
 
+    private void createNewRecord() {
+        try {
+            final int amount = getAmount();
+            final String note = getNote();
+            final Date date = getDate();
+            final Category category = getCategory();
+
+            final Record newRecord = new Record(amount, date, category);
+            newRecord.setNote(note);
+            newRecord.save();
+            Toast.makeText(this, "Record saved!", Toast.LENGTH_SHORT).show();
+
+            finish();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private Category getCategory() {
+        final Category selectedItem = (Category) spinnerCategory.getSelectedItem();
+        return selectedItem;
+    }
+
+    private Date getDate() {
+        try {
+            return DATE_FORMAT.parse(etDate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private String getNote() {
+        return etNote.getText().toString();
+    }
+
+    private int getAmount() {
+        return (int) (Double.parseDouble(amountTextView.getText().toString()) * 100);
+    }
 
     private void populate() {
         final Iterator<Category> allCategories = Category.findAll(Category.class);
-
-        final ArrayList<String> items = new ArrayList<>();
-        while (allCategories.hasNext()) {
-            final Category category = allCategories.next();
-            items.add(category.getName());
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        final ArrayList<Category> categories = Lists.newArrayList(allCategories);
+        final ArrayAdapter<Category> adapter = new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_dropdown_item, categories);
         spinnerCategory.setAdapter(adapter);
     }
 
@@ -113,4 +147,5 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
         c.set(year, monthOfYear, dayOfMonth);
         etDate.setText(DATE_FORMAT.format(c.getTime()));
     }
+
 }
