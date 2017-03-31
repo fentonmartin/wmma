@@ -12,4 +12,6 @@
     <string name="note">Note</string>
     <string name="date">Date</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="delete">Delete</string>
+    <string name="errorCategoryDelete">Can not delete this category because records exist.</string>
 </resources>
