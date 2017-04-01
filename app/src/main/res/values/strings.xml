@@ -15,4 +15,6 @@
     <string name="delete">Delete</string>
     <string name="errorCategoryDelete">Can not delete category %s because transactions exist.</string>
     <string name="category">Category</string>
+    <string name="errorGeneric">An error occurred!</string>
+    <string name="transactionCreated">Transaction created!</string>
 </resources>

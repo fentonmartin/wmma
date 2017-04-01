@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.R;
 import at.foobartech.wheremymoneyat.model.Category;
@@ -34,7 +35,7 @@ import butterknife.OnClick;
 
 public class AddRecordActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, Validator.ValidationListener {
 
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @NotEmpty
     @BindView(R.id.tv_amount)
@@ -83,32 +84,6 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
         return true;
     }
 
-    private void createNewTransaction() {
-        validator.validate();
-    }
-
-    private Category getCategory() {
-        final List<Category> selectedItem = Category.find(Category.class, "name = ?", etCategory.getText().toString());
-        return selectedItem.get(0);
-    }
-
-    private Date getDate() {
-        try {
-            return DATE_FORMAT.parse(etDate.getText().toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private String getNote() {
-        return etNote.getText().toString();
-    }
-
-    private int getAmount() {
-        return (int) (Double.parseDouble(etAmount.getText().toString()) * 100);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_add_record, menu);
@@ -116,8 +91,8 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     }
 
     @OnClick(R.id.et_date)
-    void onDateClick(View view) {
-        Calendar now = Calendar.getInstance();
+    void onDateClicked(View view) {
+        final Calendar now = Calendar.getInstance();
         DatePickerDialog dpd = DatePickerDialog.newInstance(
                 this,
                 now.get(Calendar.YEAR),
@@ -129,14 +104,13 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
+        final Calendar c = Calendar.getInstance();
         c.set(year, monthOfYear, dayOfMonth);
         etDate.setText(DATE_FORMAT.format(c.getTime()));
     }
 
-    //    @OnTouch(R.id.et_category)
     @OnClick(R.id.et_category)
-    void onCategory() {
+    void onCategoryClicked() {
         final Iterator<Category> allCategories = Category.findAll(Category.class);
         final ArrayList<Category> categories = Lists.newArrayList(allCategories);
         new MaterialDialog.Builder(this)
@@ -155,24 +129,24 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     public void onValidationSucceeded() {
         try {
             final int amount = getAmount();
-            final Date date = getDate();
-            final Category category = getCategory();
-            final String note = getNote();
+            final Date date = parseDate();
+            final Category category = parseCategory();
+            final String note = parseNote();
 
             final Record newRecord = new Record(amount, date, category);
             newRecord.setNote(note);
             newRecord.save();
-            Toast.makeText(this, "Transaction created!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.transactionCreated, Toast.LENGTH_SHORT).show();
 
             finish();
         } catch (Exception e) {
-            Toast.makeText(this, "An error occurred!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.errorGeneric, Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
-        for (ValidationError error : errors) {
+        for (final ValidationError error : errors) {
             final View view = error.getView();
             final String message = error.getCollatedErrorMessage(this);
 
@@ -182,5 +156,29 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void createNewTransaction() {
+        validator.validate();
+    }
+
+    private Category parseCategory() {
+        final List<Category> categories = Category.find(Category.class, "name = ?", etCategory.getText().toString());
+        if (categories.isEmpty()) {
+            throw new IllegalStateException("Category must not be null!");
+        }
+        return categories.get(0);
+    }
+
+    private Date parseDate() throws ParseException {
+        return DATE_FORMAT.parse(etDate.getText().toString());
+    }
+
+    private String parseNote() {
+        return etNote.getText().toString();
+    }
+
+    private int getAmount() {
+        return (int) (Double.parseDouble(etAmount.getText().toString()) * 100);
     }
 }

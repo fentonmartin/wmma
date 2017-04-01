@@ -90,30 +90,6 @@ public class CategoryActivity extends AppCompatActivity {
         }
     };
 
-
-    private void deleteSelectedCategory() {
-        if (listView.getCheckedItemCount() <= 0) {
-            return;
-        }
-
-        final Category category = (Category) listView.getItemAtPosition(listView.getCheckedItemPosition());
-        if (category != null) {
-            final List<Record> records = Record.find(Record.class, "category = ?", category.getId().toString());
-
-            if (records == null || records.isEmpty()) {
-                category.delete();
-                refreshListView();
-            } else {
-                Toast.makeText(this, String.format(this.getString(R.string.errorCategoryDelete), category.getName()), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void createCategory(String name) {
-        new Category(name).save();
-        refreshListView();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,15 +120,13 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void refreshListView() {
         final ArrayList<Category> categories = Lists.newArrayList(Category.findAll(Category.class));
-
-
         listViewAdapter = new CategoryAdapter(this, categories);
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.add)
-    void handleAdd(View view) {
+    void onAddClicked(View view) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.createCategoryTitle);
 
@@ -175,5 +149,28 @@ public class CategoryActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private void deleteSelectedCategory() {
+        if (listView.getCheckedItemCount() <= 0) {
+            return;
+        }
+
+        final Category category = (Category) listView.getItemAtPosition(listView.getCheckedItemPosition());
+        if (category != null) {
+            final List<Record> records = Record.find(Record.class, "category = ?", category.getId().toString());
+
+            if (records == null || records.isEmpty()) {
+                category.delete();
+                refreshListView();
+            } else {
+                Toast.makeText(this, String.format(this.getString(R.string.errorCategoryDelete), category.getName()), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void createCategory(String name) {
+        new Category(name).save();
+        refreshListView();
     }
 }
