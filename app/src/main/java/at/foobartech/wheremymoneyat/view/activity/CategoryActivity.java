@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -40,13 +41,25 @@ public class CategoryActivity extends AppCompatActivity {
 
     private ArrayAdapter listViewAdapter;
     private ActionMode mActionMode;
-    private Toolbar toolbar;
-    private int selectedCategoryPosition = -1;
+
+    private final AdapterView.OnItemLongClickListener longClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            if (mActionMode != null) {
+                return false;
+            }
+
+            mActionMode = startSupportActionMode(mActionModeCallback);
+            listView.setItemChecked(position, true);
+            return true;
+        }
+    };
 
     private final ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            listView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
             mode.getMenuInflater().inflate(R.menu.context_category, menu);
             return true;
         }
@@ -70,41 +83,29 @@ public class CategoryActivity extends AppCompatActivity {
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             listView.clearChoices();
-            listViewAdapter.notifyDataSetChanged();
+            listView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
+            refreshListView();
             mActionMode.finish();
             mActionMode = null;
         }
     };
 
-    private final AdapterView.OnItemLongClickListener longClickListener = new AdapterView.OnItemLongClickListener() {
-        @Override
-        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-            if (mActionMode != null) {
-                return false;
-            }
-
-            mActionMode = startSupportActionMode(mActionModeCallback);
-            view.setSelected(true);
-            selectedCategoryPosition = position;
-            listView.setSelection(position);
-            return true;
-        }
-    };
 
     private void deleteSelectedCategory() {
-        final Category category = (Category) listView.getItemAtPosition(selectedCategoryPosition);
-
-        if (category == null) {
+        if (listView.getCheckedItemCount() <= 0) {
             return;
         }
 
-        final List<Record> records = Record.find(Record.class, "category = ?", category.getId().toString());
+        final Category category = (Category) listView.getItemAtPosition(listView.getCheckedItemPosition());
+        if (category != null) {
+            final List<Record> records = Record.find(Record.class, "category = ?", category.getId().toString());
 
-        if (records == null || records.isEmpty()) {
-            category.delete();
-            refreshListView();
-        } else {
-            Toast.makeText(this, R.string.errorCategoryDelete, Toast.LENGTH_SHORT).show();
+            if (records == null || records.isEmpty()) {
+                category.delete();
+                refreshListView();
+            } else {
+                Toast.makeText(this, String.format(this.getString(R.string.errorCategoryDelete), category.getName()), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -117,7 +118,7 @@ public class CategoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -133,12 +134,18 @@ public class CategoryActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        this.finish();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                break;
+        }
         return true;
     }
 
     private void refreshListView() {
         final ArrayList<Category> categories = Lists.newArrayList(Category.findAll(Category.class));
+
+
         listViewAdapter = new CategoryAdapter(this, categories);
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();

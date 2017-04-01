@@ -26,17 +26,44 @@
             android:inputType="numberDecimal"
             android:textSize="@dimen/huge_font_size"
             app:met_hideUnderline="true"
-            app:met_textColor="@color/colorAccent" />
+            app:met_textColor="@color/colorIcons" />
     </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="12sp" />
 
-    <Spinner
-        android:id="@+id/spinner_category"
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/et_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10sp"
+        android:layout_marginStart="10sp"
+        android:cursorVisible="false"
+        android:focusableInTouchMode="false"
+        android:hint="@string/date"
+        android:inputType="none"
+        app:met_floatingLabel="normal"
+        app:met_iconLeft="@drawable/ic_today_black_24dp"
+        app:met_iconPadding="0dp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12sp" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/et_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10sp"
+        android:layout_marginStart="10sp"
+        android:cursorVisible="false"
+        android:focusableInTouchMode="false"
+        android:hint="@string/category"
+        android:inputType="text"
+        app:met_floatingLabel="normal"
+        app:met_iconLeft="@drawable/ic_help_black_24dp"
+        app:met_iconPadding="0dp" />
 
     <Space
         android:layout_width="match_parent"
@@ -50,26 +77,8 @@
         android:layout_marginStart="10sp"
         android:hint="@string/note"
         android:inputType="text"
-        android:paddingEnd="10sp"
-        android:paddingStart="10sp"
         app:met_floatingLabel="normal"
-        app:met_iconLeft="@drawable/ic_note_black_24dp" />
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="12sp" />
-
-    <com.rengwuxian.materialedittext.MaterialEditText
-        android:id="@+id/et_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10sp"
-        android:layout_marginStart="10sp"
-        android:hint="@string/date"
-        android:inputType="none"
-        android:paddingEnd="10sp"
-        android:paddingStart="10sp"
-        app:met_floatingLabel="normal"
-        app:met_iconLeft="@drawable/ic_today_black_24dp" />
+        app:met_iconLeft="@drawable/ic_note_black_24dp"
+        app:met_iconPadding="0dp" />
 
 </LinearLayout>

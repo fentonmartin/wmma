@@ -28,7 +28,8 @@
             android:name=".view.activity.AddRecordActivity"
             android:label="@string/addRecord"
             android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="DATABASE"

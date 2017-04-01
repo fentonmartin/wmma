@@ -6,12 +6,13 @@
     <string name="createCategoryTitle">Add category</string>
     <string name="buttonOK">OK</string>
     <string name="buttonCancel">Cancel</string>
-    <string name="addRecord">New Record</string>
+    <string name="addRecord">Add transaction</string>
     <string name="action_done">Done</string>
     <string name="action_cancel">Cancel</string>
     <string name="note">Note</string>
     <string name="date">Date</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="delete">Delete</string>
-    <string name="errorCategoryDelete">Can not delete this category because records exist.</string>
+    <string name="errorCategoryDelete">Can not delete category %s because transactions exist.</string>
+    <string name="category">Category</string>
 </resources>
