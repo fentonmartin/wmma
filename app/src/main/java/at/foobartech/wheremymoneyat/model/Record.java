@@ -2,6 +2,7 @@ package at.foobartech.wheremymoneyat.model;
 
 import com.orm.SugarRecord;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,7 @@ public class Record extends SugarRecord {
 
     private int amount;
     private Date date;
+    private int month;
     private String note;
     private Category category;
 
@@ -20,9 +22,9 @@ public class Record extends SugarRecord {
     }
 
     public Record(int amount, Date date, Category category) {
-        this.amount = amount;
-        this.date = date;
-        this.category = category;
+        setAmount(amount);
+        setDate(date);
+        setCategory(category);
     }
 
     public int getAmount() {
@@ -38,7 +40,10 @@ public class Record extends SugarRecord {
     }
 
     public void setDate(Date date) {
+        final Calendar c = Calendar.getInstance();
+        c.setTime(date);
         this.date = date;
+        this.month = c.get(Calendar.MONTH);
     }
 
     public List<Tag> getTags() {

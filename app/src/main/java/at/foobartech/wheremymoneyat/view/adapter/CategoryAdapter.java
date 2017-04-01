@@ -34,13 +34,10 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         }
 
         final Category category = getItem(position);
-        if (category == null) {
-            return convertView;
+        if (category != null) {
+            final TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
+            text1.setText(String.format("%s", category.getName()));
         }
-
-        final TextView text1 = (TextView) convertView.findViewById(android.R.id.text1);
-        text1.setText(String.format("%s", category.getName()));
-
         return convertView;
     }
 }

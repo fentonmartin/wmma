@@ -14,17 +14,26 @@ import android.widget.ListView;
 import com.google.common.collect.Lists;
 import com.orm.SugarContext;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
 
+import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
 import at.foobartech.wheremymoneyat.view.activity.AddRecordActivity;
 import at.foobartech.wheremymoneyat.view.activity.CategoryActivity;
-import at.foobartech.wheremymoneyat.view.adapter.RecordAdapter;
+import at.foobartech.wheremymoneyat.view.adapter.OverviewAdapter;
+import at.foobartech.wheremymoneyat.view.viewmodel.OverviewItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @BindView(R.id.add)
     FloatingActionButton add;
@@ -46,13 +55,38 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        populate();
+        refreshListView();
     }
 
-    private void populate() {
-        final ArrayList<Record> records = Lists.newArrayList(Record.findAll(Record.class));
-        final ArrayAdapter adapter = new RecordAdapter(this, records);
+    private void refreshListView() {
+        final ArrayList<Category> allCategories = Lists.newArrayList(Category.findAll(Category.class));
+
+        final ArrayList<OverviewItem> items = new ArrayList<>();
+        int totalAmount = 0;
+        for (final Category category : allCategories) {
+            final String[] args = {category.getId().toString(), getMonth() + ""};
+            final List<Record> records = Record.find(Record.class, "category = ? AND month = ?", args);
+
+            if (!records.isEmpty()) {
+                int totalAmountCategory = records.stream().map(Record::getAmount).reduce(0, (a, b) -> a + b);
+                totalAmount += totalAmountCategory;
+                items.add(new OverviewItem(category.getName(), totalAmountCategory));
+            }
+        }
+
+        Collections.sort(items, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName()));
+        items.add(0, new OverviewItem("Total", totalAmount));
+
+        final ArrayAdapter adapter = new OverviewAdapter(this, items);
+
+//        final ArrayList<Record> records = Lists.newArrayList(Record.findAll(Record.class));
+//        final ArrayAdapter adapter = new RecordAdapter(this, records);
         listView.setAdapter(adapter);
+    }
+
+    private int getMonth() {
+        Calendar c = Calendar.getInstance();
+        return c.get(Calendar.MONTH);
     }
 
     @OnClick(R.id.add)

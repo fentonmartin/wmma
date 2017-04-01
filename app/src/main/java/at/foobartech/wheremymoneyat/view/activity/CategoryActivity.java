@@ -18,9 +18,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import at.foobartech.wheremymoneyat.R;
@@ -120,6 +123,14 @@ public class CategoryActivity extends AppCompatActivity {
 
     private void refreshListView() {
         final ArrayList<Category> categories = Lists.newArrayList(Category.findAll(Category.class));
+        Collections.sort(categories, new Comparator<Category>() {
+            @Override
+            public int compare(final Category o1, final Category o2) {
+                if (o1 == null) return -1;
+                if (o2 == null) return 1;
+                return String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName());
+            }
+        });
         listViewAdapter = new CategoryAdapter(this, categories);
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
@@ -138,10 +149,14 @@ public class CategoryActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String name = input.getText().toString();
-                createCategory(name);
+                if (!Strings.isNullOrEmpty(name)) {
+                    createCategory(name);
+                }
             }
         });
-        builder.setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.buttonCancel, new DialogInterface.OnClickListener()
+
+        {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
