@@ -2,9 +2,7 @@
 
 A simple and minimalistic app for tracking your expenses. Nothing more and nothing less.
 
-![add transaction](doc/img/screen1.png)
-![details](doc/img/screen2.png)
-![overview](doc/img/screen3.png)
+<img src="https://github.com/fchtngr/wmma/blob/master/doc/img/screen1.png" width="200">
 
 ## Features
 
