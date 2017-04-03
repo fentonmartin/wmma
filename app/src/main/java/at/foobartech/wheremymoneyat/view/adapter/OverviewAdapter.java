@@ -44,7 +44,6 @@ public class OverviewAdapter extends ArrayAdapter<OverviewItem> {
                 tvTitle.setTypeface(null, Typeface.BOLD);
                 tvAmount.setTypeface(null, Typeface.BOLD);
                 tvAmount.setTextColor(convertView.getResources().getColor(R.color.colorAccent));
-                convertView.setPaddingRelative();
             }
         }
         return convertView;

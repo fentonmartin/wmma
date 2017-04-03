@@ -2,6 +2,8 @@ package at.foobartech.wheremymoneyat.model;
 
 import com.orm.SugarRecord;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -37,6 +39,10 @@ public class Record extends SugarRecord {
 
     public Date getDate() {
         return date;
+    }
+
+    public Date getDateWithoutTime() {
+        return DateUtils.truncate(getDate(), Calendar.DAY_OF_MONTH);
     }
 
     public void setDate(Date date) {

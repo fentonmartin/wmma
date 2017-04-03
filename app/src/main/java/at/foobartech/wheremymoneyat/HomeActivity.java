@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -25,11 +26,13 @@ import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
 import at.foobartech.wheremymoneyat.view.activity.AddRecordActivity;
 import at.foobartech.wheremymoneyat.view.activity.CategoryActivity;
+import at.foobartech.wheremymoneyat.view.activity.DetailActivity;
 import at.foobartech.wheremymoneyat.view.adapter.OverviewAdapter;
 import at.foobartech.wheremymoneyat.view.viewmodel.OverviewItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -41,6 +44,8 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.listView)
     ListView listView;
 
+    private Calendar selectedDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,48 +55,57 @@ public class HomeActivity extends AppCompatActivity {
 
         SugarContext.init(this);
         ButterKnife.bind(this);
+
+        selectedDate = Calendar.getInstance();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refreshListView();
+        refreshView();
     }
 
-    private void refreshListView() {
+    private void refreshView() {
+        setTitle(title());
+
         final ArrayList<Category> allCategories = Lists.newArrayList(Category.findAll(Category.class));
 
         final ArrayList<OverviewItem> items = new ArrayList<>();
         int totalAmount = 0;
         for (final Category category : allCategories) {
-            final String[] args = {category.getId().toString(), getMonth() + ""};
+            final String[] args = {category.getId().toString(), Integer.toString(selectedDate.get(Calendar.MONTH))};
             final List<Record> records = Record.find(Record.class, "category = ? AND month = ?", args);
 
             if (!records.isEmpty()) {
                 int totalAmountCategory = records.stream().map(Record::getAmount).reduce(0, (a, b) -> a + b);
                 totalAmount += totalAmountCategory;
-                items.add(new OverviewItem(category.getName(), totalAmountCategory));
+                items.add(new OverviewItem(category.getName(), totalAmountCategory, category.getId()));
             }
         }
 
         Collections.sort(items, (o1, o2) -> String.CASE_INSENSITIVE_ORDER.compare(o1.getName(), o2.getName()));
-        items.add(0, new OverviewItem("Total", totalAmount));
+        items.add(0, new OverviewItem("Total", totalAmount, -1));
 
         final ArrayAdapter adapter = new OverviewAdapter(this, items);
-
-//        final ArrayList<Record> records = Lists.newArrayList(Record.findAll(Record.class));
-//        final ArrayAdapter adapter = new RecordAdapter(this, records);
         listView.setAdapter(adapter);
     }
 
-    private int getMonth() {
-        Calendar c = Calendar.getInstance();
-        return c.get(Calendar.MONTH);
+    private String title() {
+        return selectedDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
     }
 
     @OnClick(R.id.add)
     void handleAdd(View view) {
         final Intent intent = new Intent(this, AddRecordActivity.class);
+        this.startActivity(intent);
+    }
+
+    @OnItemClick(R.id.listView)
+    void handleItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OverviewItem item = (OverviewItem) listView.getItemAtPosition(position);
+        final Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("month", selectedDate.get(Calendar.MONTH));
+        intent.putExtra("categoryId", item.getCategoryId());
         this.startActivity(intent);
     }
 
@@ -104,22 +118,31 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (id) {
+            case R.id.action_categories:
+                final Intent intent = new Intent(this, CategoryActivity.class);
+                this.startActivity(intent);
+                return true;
+            case R.id.action_next_month:
+                if (!isCurrentMonth()) {
+                    selectedDate.add(Calendar.MONTH, 1);
+                    refreshView();
+                }
+                return true;
 
-        if (id == R.id.action_categories) {
-            final Intent intent = new Intent(this, CategoryActivity.class);
-            this.startActivity(intent);
-            return true;
+            case R.id.action_prev_month:
+                selectedDate.add(Calendar.MONTH, -1);
+                refreshView();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isCurrentMonth() {
+        final Calendar thisMonth = Calendar.getInstance();
+        return selectedDate.get(Calendar.MONTH) == thisMonth.get(Calendar.MONTH);
     }
 }
