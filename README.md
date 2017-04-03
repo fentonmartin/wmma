@@ -1,6 +1,6 @@
 # WMMA - Where My Money At?
 
-A simple and minimalistic tool for tracking expenses. Nothing more and nothing less.
+A simple and minimalistic app for tracking your expenses. Nothing more and nothing less.
 
 ## Features
 
@@ -14,7 +14,7 @@ A simple and minimalistic tool for tracking expenses. Nothing more and nothing l
 
 ## Coming soon
 
-+ Export to CSV and Google Sheets
++ Export data to CSV and Google Sheets
 
 
 
