@@ -6,6 +6,8 @@ A simple and minimalistic app for tracking your expenses. Nothing more and nothi
 
 There are many expense trackers available for Android, why another one? Yes, there are a lot of expense trackers out there. They either have a ton of other features I dont need (budgets, income, bills, recurring payments to name a few) and/or they require you to create an account and sync your data to some webservice. I didnt want to give those services my data. Thus I created **WMMA - Where My Money At**
 
+
+
 ## Features
 
 + **Track your expenses** - nothing more and nothing less
@@ -17,6 +19,8 @@ There are many expense trackers available for Android, why another one? Yes, the
 + **No permissions required** - yes, not even `android.permission.INTERNET`
 + **Free**
 + **Open Source**
+
+*"Perfection is Achieved Not When There Is Nothing More to Add, But When There Is Nothing Left to Take Away"* - **Antoine de Saint-Exupery**
 
 ## Coming soon
 
