@@ -2,8 +2,7 @@
 
 A simple and minimalistic app for tracking your expenses. Nothing more and nothing less.
 
-<img src="https://github.com/fchtngr/wmma/blob/master/doc/img/screen1.png" width="200">
-<img src="https://github.com/fchtngr/wmma/blob/master/doc/img/screen2.png" width="200">
+<img src="https://github.com/fchtngr/wmma/blob/master/doc/img/screen1.png" width="200"><img src="https://github.com/fchtngr/wmma/blob/master/doc/img/screen2.png" width="200">
 
 ## Features
 
