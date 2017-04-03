@@ -2,6 +2,10 @@
 
 A simple and minimalistic app for tracking your expenses. Nothing more and nothing less.
 
+![add transaction](doc/img/screen1.png)
+![details](doc/img/screen2.png)
+![overview](doc/img/screen3.png)
+
 ## Features
 
 + **No income tracking** - expenses only!
