@@ -18,15 +18,14 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.R;
+import at.foobartech.wheremymoneyat.WMMAUtils;
 import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
 import butterknife.BindView;
@@ -34,8 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddRecordActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, Validator.ValidationListener {
-
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @NotEmpty
     @BindView(R.id.tv_amount)
@@ -68,7 +65,7 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
         validator = new Validator(this);
         validator.setValidationListener(this);
 
-        etDate.setText(DATE_FORMAT.format(new Date()));
+        etDate.setText(WMMAUtils.formatDate(new Date()));
     }
 
     @Override
@@ -106,7 +103,7 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         final Calendar c = Calendar.getInstance();
         c.set(year, monthOfYear, dayOfMonth);
-        etDate.setText(DATE_FORMAT.format(c.getTime()));
+        etDate.setText(WMMAUtils.formatDate(c.getTime()));
     }
 
     @OnClick(R.id.et_category)
@@ -171,7 +168,7 @@ public class AddRecordActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private Date parseDate() throws ParseException {
-        return DATE_FORMAT.parse(etDate.getText().toString());
+        return WMMAUtils.parseDate(etDate.getText().toString());
     }
 
     private String parseNote() {

@@ -6,12 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.R;
+import at.foobartech.wheremymoneyat.WMMAUtils;
 import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
 import at.foobartech.wheremymoneyat.view.adapter.DetailAdapter;
@@ -19,8 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
-
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
     private Category category;
     private int month;
@@ -72,7 +69,7 @@ public class DetailActivity extends AppCompatActivity {
     private String title() {
         final Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, month);
-        return DATE_FORMAT.format(c.getTime());
+        return WMMAUtils.formatDatePretty(c.getTime());
     }
 
     private void parseIntent() {
