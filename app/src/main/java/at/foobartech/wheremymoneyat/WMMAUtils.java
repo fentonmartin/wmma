@@ -1,5 +1,6 @@
 package at.foobartech.wheremymoneyat;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -23,5 +24,9 @@ public class WMMAUtils {
 
     public static String formatAmount(int amount) {
         return String.format(Locale.getDefault(), "%.2f", amount / 100d);
+    }
+
+    public static Date parseDate(String s) throws ParseException {
+        return DATE_FORMAT_ISO.parse(s);
     }
 }
