@@ -2,8 +2,9 @@ package at.foobartech.wheremymoneyat.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,25 +22,36 @@ public class DetailActivity extends AppCompatActivity {
 
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
-
     private Category category;
     private int month;
 
-    @BindView(R.id.listView)
-    ListView listView;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
 
+        initToolbar();
+        initRecyclerView();
         parseIntent();
         refreshView();
+    }
+
+    private void initRecyclerView() {
+        recyclerView.hasFixedSize();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initToolbar() {
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void refreshView() {
@@ -53,8 +65,8 @@ public class DetailActivity extends AppCompatActivity {
             records = Record.find(Record.class, "month = ?", Integer.toString(month));
         }
 
-        final DetailAdapter detailAdapter = DetailAdapter.create(this, records);
-        listView.setAdapter(detailAdapter);
+        final DetailAdapter detailAdapter = new DetailAdapter(records);
+        recyclerView.setAdapter(detailAdapter);
     }
 
     private String title() {

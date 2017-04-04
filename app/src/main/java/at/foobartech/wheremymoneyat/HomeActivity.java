@@ -15,7 +15,6 @@ import android.widget.ListView;
 import com.google.common.collect.Lists;
 import com.orm.SugarContext;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -36,7 +35,6 @@ import butterknife.OnItemClick;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
     @BindView(R.id.add)
     FloatingActionButton add;

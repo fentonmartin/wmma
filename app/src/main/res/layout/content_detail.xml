@@ -8,9 +8,14 @@
     tools:context="at.foobartech.wheremymoneyat.view.activity.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
-    <ListView
-        android:id="@+id/listView"
+    <!--<ListView-->
+    <!--android:id="@+id/listView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

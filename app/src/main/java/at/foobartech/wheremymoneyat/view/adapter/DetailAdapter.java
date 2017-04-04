@@ -1,12 +1,11 @@
 package at.foobartech.wheremymoneyat.view.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.common.collect.ImmutableList;
@@ -18,61 +17,75 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.R;
+import at.foobartech.wheremymoneyat.WMMAUtils;
 import at.foobartech.wheremymoneyat.model.Record;
-import at.foobartech.wheremymoneyat.view.viewmodel.DetailItem;
 
 /**
  * @author Thomas Feichtinger
  */
 
-public class DetailAdapter extends ArrayAdapter<DetailItem> {
+public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailViewHolder> {
 
-    public DetailAdapter(Context context, ArrayList<DetailItem> items) {
-        super(context, 0, items);
+    private final List<Date> titles;
+    private final List<ImmutableList<Record>> records;
+
+    public DetailAdapter(final List<Record> records) {
+        final ImmutableListMultimap<Date, Record> groupedRecords = Multimaps.index(records, Record::getDateWithoutTime);
+        final List<Date> dates = Lists.newArrayList(groupedRecords.keySet());
+        Collections.sort(dates, (d1, d2) -> d2.compareTo(d1));
+
+        this.titles = new ArrayList<>();
+        this.records = new ArrayList<>();
+        for (final Date d : dates) {
+            this.titles.add(d);
+            this.records.add(groupedRecords.get(d));
+        }
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final DetailItem item = getItem(position);
-        if (item != null) {
-
-            switch (item.getType()) {
-                case DIVIDER:
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_detail_divider, parent, false);
-                    break;
-                case ITEM:
-                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_detail_item, parent, false);
-            }
-
-            final TextView title = (TextView) convertView.findViewById(R.id.tv_title);
-            final TextView amount = (TextView) convertView.findViewById(R.id.tv_amount);
-
-            amount.setText(String.format(Locale.getDefault(), "%.2f", item.getAmount() / 100d));
-            title.setText(item.getTitle());
-        }
-        return convertView;
+    public DetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        final View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_detail, parent, false);
+        return new DetailViewHolder(v);
     }
 
-    public static DetailAdapter create(Context context, final List<Record> allRecords) {
-        final ImmutableListMultimap<Date, Record> groupedRecords = Multimaps.index(allRecords, Record::getDateWithoutTime);
+    @Override
+    public void onBindViewHolder(DetailViewHolder holder, int position) {
+        holder.tvTitle.setText(WMMAUtils.formatDatePretty(titles.get(position)));
 
-        final ArrayList<DetailItem> result = new ArrayList<>();
-
-        final ArrayList<Date> dates = Lists.newArrayList(groupedRecords.keySet());
-        Collections.sort(dates, (o1, o2) -> o2.compareTo(o1));
-        for (final Date date : dates) {
-            final ImmutableList<Record> records = groupedRecords.get(date);
-            int totalAmount = records.stream().map(Record::getAmount).reduce(0, (a, b) -> a + b);
-            result.add(DetailItem.createDivider(date, totalAmount));
-
-            for (Record r : records) {
-                result.add(DetailItem.createItem(r.getCategory().getName(), r.getAmount(), r.getNote()));
-            }
+        for (Record r : records.get(position)) {
+            final View view = LayoutInflater.from(holder.context).inflate(R.layout.item_detail_item, null);
+            final TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
+            final TextView tvAmount = (TextView) view.findViewById(R.id.tv_amount);
+            tvTitle.setText(r.getCategory().getName());
+            tvAmount.setText(WMMAUtils.formatAmount(r.getAmount()));
+            holder.llContent.addView(view);
         }
-        return new DetailAdapter(context, result);
     }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return titles.size();
+    }
+
+    static class DetailViewHolder extends RecyclerView.ViewHolder {
+
+        final TextView tvTitle;
+        final LinearLayout llContent;
+        private final Context context;
+
+        DetailViewHolder(final View itemView) {
+            super(itemView);
+            this.context = itemView.getContext();
+            this.tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            this.llContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
+        }
+    }
+
 }

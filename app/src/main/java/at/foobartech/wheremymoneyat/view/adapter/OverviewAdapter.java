@@ -11,9 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.R;
+import at.foobartech.wheremymoneyat.WMMAUtils;
 import at.foobartech.wheremymoneyat.view.viewmodel.OverviewItem;
 
 /**
@@ -38,7 +38,7 @@ public class OverviewAdapter extends ArrayAdapter<OverviewItem> {
             final TextView tvAmount = (TextView) convertView.findViewById(R.id.tv_amount);
 
             tvTitle.setText(item.getName());
-            tvAmount.setText(String.format(Locale.getDefault(), "%.2f", item.getTotalAmount() / 100d));
+            tvAmount.setText(WMMAUtils.formatAmount(item.getTotalAmount()));
 
             if (position == 0) {
                 tvTitle.setTypeface(null, Typeface.BOLD);
