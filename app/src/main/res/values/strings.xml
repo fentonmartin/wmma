@@ -17,4 +17,5 @@
     <string name="category">Category</string>
     <string name="errorGeneric">An error occurred!</string>
     <string name="transactionCreated">Transaction created!</string>
+    <string name="label_total">Total</string>
 </resources>

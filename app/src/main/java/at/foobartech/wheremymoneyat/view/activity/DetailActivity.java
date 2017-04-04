@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import at.foobartech.wheremymoneyat.R;
-import at.foobartech.wheremymoneyat.WMMAUtils;
 import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
 import at.foobartech.wheremymoneyat.view.adapter.DetailAdapter;
@@ -67,9 +66,11 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private String title() {
-        final Calendar c = Calendar.getInstance();
-        c.set(Calendar.MONTH, month);
-        return WMMAUtils.formatDatePretty(c.getTime());
+        if (category != null) {
+            return category.getName();
+        } else {
+            return getString(R.string.label_total);
+        }
     }
 
     private void parseIntent() {

@@ -29,6 +29,7 @@ import at.foobartech.wheremymoneyat.model.Record;
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailViewHolder> {
 
     private final List<Date> titles;
+    private final List<Integer> amounts;
     private final List<ImmutableList<Record>> records;
 
     public DetailAdapter(final List<Record> records) {
@@ -38,9 +39,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
 
         this.titles = new ArrayList<>();
         this.records = new ArrayList<>();
+        this.amounts = new ArrayList<>();
         for (final Date d : dates) {
             this.titles.add(d);
-            this.records.add(groupedRecords.get(d));
+            ImmutableList<Record> r = groupedRecords.get(d);
+            this.amounts.add(r.stream().map(Record::getAmount).reduce(0, (a, b) -> a + b));
+            this.records.add(r);
         }
     }
 
@@ -53,8 +57,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     @Override
     public void onBindViewHolder(DetailViewHolder holder, int position) {
         holder.tvTitle.setText(WMMAUtils.formatDatePretty(titles.get(position)));
+        holder.tvAmount.setText(WMMAUtils.formatAmount(amounts.get(position)));
 
-        for (Record r : records.get(position)) {
+        for (final Record r : records.get(position)) {
             final View view = LayoutInflater.from(holder.context).inflate(R.layout.item_detail_item, null);
             final TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
             final TextView tvAmount = (TextView) view.findViewById(R.id.tv_amount);
@@ -77,12 +82,14 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     static class DetailViewHolder extends RecyclerView.ViewHolder {
 
         final TextView tvTitle;
+        final TextView tvAmount;
         final LinearLayout llContent;
         private final Context context;
 
         DetailViewHolder(final View itemView) {
             super(itemView);
             this.context = itemView.getContext();
+            this.tvAmount = (TextView) itemView.findViewById(R.id.tv_amount);
             this.tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             this.llContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
         }
