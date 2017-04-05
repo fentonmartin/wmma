@@ -17,6 +17,7 @@
             android:id="@+id/ll_toggle_expand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -60,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:divider="@color/colorSecondaryText"
                 android:orientation="vertical"
-                android:showDividers="beginning|middle"
                 android:stateListAnimator="@animator/details_selection" />
 
         </LinearLayout>
