@@ -14,15 +14,15 @@
         app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:id="@+id/ll_toggle_expand"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll_toggle_expand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
                 android:orientation="horizontal"
                 android:paddingBottom="16sp"
                 android:paddingTop="16sp">

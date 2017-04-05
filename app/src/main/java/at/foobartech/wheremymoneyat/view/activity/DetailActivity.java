@@ -61,7 +61,7 @@ public class DetailActivity extends AppCompatActivity {
             records = Record.find(Record.class, "month = ?", Integer.toString(month));
         }
 
-        final DetailAdapter detailAdapter = new DetailAdapter(recyclerView, records);
+        final DetailAdapter detailAdapter = new DetailAdapter(this, recyclerView, records);
         recyclerView.setAdapter(detailAdapter);
     }
 

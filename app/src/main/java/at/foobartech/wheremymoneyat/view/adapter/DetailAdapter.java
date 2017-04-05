@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
@@ -32,11 +33,20 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     private final List<Date> titles;
     private final List<Integer> amounts;
     private final List<ImmutableList<Record>> records;
+    private final Context context;
     private int expandedView;
     private RecyclerView root;
 
-    public DetailAdapter(RecyclerView root, final List<Record> records) {
+    private final View.OnClickListener detailItemClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    public DetailAdapter(Context context, RecyclerView root, final List<Record> records) {
         this.root = root;
+        this.context = context;
         final ImmutableListMultimap<Date, Record> groupedRecords = Multimaps.index(records, Record::getDateWithoutTime);
         final List<Date> dates = Lists.newArrayList(groupedRecords.keySet());
         Collections.sort(dates, (d1, d2) -> d2.compareTo(d1));
@@ -80,6 +90,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             final TextView tvAmount = (TextView) view.findViewById(R.id.tv_amount);
             tvTitle.setText(r.getCategory().getName());
             tvAmount.setText(WMMAUtils.formatAmount(r.getAmount()));
+            view.setOnClickListener(detailItemClicked);
             holder.llContent.addView(view);
         }
     }
