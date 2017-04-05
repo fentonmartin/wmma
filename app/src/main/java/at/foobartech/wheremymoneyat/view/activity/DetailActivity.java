@@ -38,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        recyclerView.hasFixedSize();
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 

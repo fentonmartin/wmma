@@ -12,7 +12,7 @@ import java.util.Locale;
 public class WMMAUtils {
 
     private final static SimpleDateFormat DATE_FORMAT_ISO = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private final static SimpleDateFormat DATE_FORMAT_PRETTY = new SimpleDateFormat("dd MMMM", Locale.getDefault());
+    private final static SimpleDateFormat DATE_FORMAT_PRETTY = new SimpleDateFormat("d MMMM", Locale.getDefault());
 
     public static String formatDate(Date date) {
         return DATE_FORMAT_ISO.format(date);
