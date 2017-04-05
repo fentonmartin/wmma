@@ -32,7 +32,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     private final List<Date> titles;
     private final List<Integer> amounts;
     private final List<ImmutableList<Record>> records;
-    private final boolean[] expandedState;
+    private int expandedView;
     private RecyclerView root;
 
     public DetailAdapter(RecyclerView root, final List<Record> records) {
@@ -50,8 +50,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             this.amounts.add(r.stream().map(Record::getAmount).reduce(0, (a, b) -> a + b));
             this.records.add(r);
         }
-        this.expandedState = new boolean[titles.size()];
-        expandedState[0] = true;
+        this.expandedView = 0;
     }
 
     @Override
@@ -65,11 +64,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
         holder.tvTitle.setText(WMMAUtils.formatDatePretty(titles.get(position)));
         holder.tvAmount.setText(WMMAUtils.formatAmount(amounts.get(position)));
 
-        holder.llContent.setVisibility(expandedState[holder.getAdapterPosition()] ? View.VISIBLE : View.GONE);
+        holder.llContent.setVisibility(expandedView == holder.getAdapterPosition() ? View.VISIBLE : View.GONE);
 
         holder.llToggleExpand.setOnClickListener(v -> {
             int i = holder.getAdapterPosition();
-            expandedState[i] = !expandedState[i];
+            expandedView = i == expandedView ? -1 : i;
             TransitionManager.beginDelayedTransition(root);
             notifyDataSetChanged();
         });
