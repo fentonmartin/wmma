@@ -1,6 +1,7 @@
 package at.foobartech.wheremymoneyat.view.adapter;
 
 import android.content.Context;
+import android.support.transition.TransitionManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
     private final List<Integer> amounts;
     private final List<ImmutableList<Record>> records;
     private final boolean[] expandedState;
+    private RecyclerView root;
 
-    public DetailAdapter(final List<Record> records) {
+    public DetailAdapter(RecyclerView root, final List<Record> records) {
+        this.root = root;
         final ImmutableListMultimap<Date, Record> groupedRecords = Multimaps.index(records, Record::getDateWithoutTime);
         final List<Date> dates = Lists.newArrayList(groupedRecords.keySet());
         Collections.sort(dates, (d1, d2) -> d2.compareTo(d1));
@@ -64,9 +67,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
 
         holder.llContent.setVisibility(expandedState[holder.getAdapterPosition()] ? View.VISIBLE : View.GONE);
 
-        holder.tvTitle.setOnClickListener(v -> {
+        holder.llToggleExpand.setOnClickListener(v -> {
             int i = holder.getAdapterPosition();
             expandedState[i] = !expandedState[i];
+            TransitionManager.beginDelayedTransition(root);
             notifyDataSetChanged();
         });
 
@@ -93,10 +97,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
 
     static class DetailViewHolder extends RecyclerView.ViewHolder {
 
+        private final Context context;
+
         final TextView tvTitle;
         final TextView tvAmount;
         final LinearLayout llContent;
-        private final Context context;
+        final LinearLayout llToggleExpand;
+
 
         DetailViewHolder(final View itemView) {
             super(itemView);
@@ -104,6 +111,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.DetailView
             this.tvAmount = (TextView) itemView.findViewById(R.id.tv_amount);
             this.tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             this.llContent = (LinearLayout) itemView.findViewById(R.id.ll_content);
+            this.llToggleExpand = (LinearLayout) itemView.findViewById(R.id.ll_toggle_expand);
         }
     }
 
