@@ -23,7 +23,7 @@ import java.util.Locale;
 
 import at.foobartech.wheremymoneyat.model.Category;
 import at.foobartech.wheremymoneyat.model.Record;
-import at.foobartech.wheremymoneyat.view.activity.AddRecordActivity;
+import at.foobartech.wheremymoneyat.view.activity.TransactionActivity;
 import at.foobartech.wheremymoneyat.view.activity.CategoryActivity;
 import at.foobartech.wheremymoneyat.view.activity.DetailActivity;
 import at.foobartech.wheremymoneyat.view.adapter.OverviewAdapter;
@@ -94,7 +94,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.add)
     void handleAdd(View view) {
-        final Intent intent = new Intent(this, AddRecordActivity.class);
+        final Intent intent = new Intent(this, TransactionActivity.class);
         this.startActivity(intent);
     }
 

@@ -25,7 +25,7 @@
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.activity.AddRecordActivity"
+            android:name=".view.activity.TransactionActivity"
             android:label="@string/addRecord"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"

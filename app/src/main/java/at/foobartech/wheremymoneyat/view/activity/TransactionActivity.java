@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddRecordActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, Validator.ValidationListener {
+public class TransactionActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, Validator.ValidationListener {
 
     @NotEmpty
     @BindView(R.id.tv_amount)
