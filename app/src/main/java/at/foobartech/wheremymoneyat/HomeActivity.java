@@ -101,9 +101,7 @@ public class HomeActivity extends AppCompatActivity {
     @OnItemClick(R.id.listView)
     void handleItemClick(AdapterView<?> parent, View view, int position, long id) {
         OverviewItem item = (OverviewItem) listView.getItemAtPosition(position);
-        final Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra("month", selectedDate.get(Calendar.MONTH));
-        intent.putExtra("categoryId", item.getCategoryId());
+        Intent intent = DetailActivity.createIntent(this, item.getCategoryId(),selectedDate.get(Calendar.MONTH));
         this.startActivity(intent);
     }
 

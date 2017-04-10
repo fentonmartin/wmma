@@ -1,5 +1,7 @@
 package at.foobartech.wheremymoneyat.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private final static String INTENT_CATEGORY_ID = "category_id";
+    private final static String INTENT_MONTH = "month";
 
     private Category category;
     private int month;
@@ -88,5 +93,13 @@ public class DetailActivity extends AppCompatActivity {
             final Calendar c = Calendar.getInstance();
             this.month = c.get(Calendar.MONTH);
         }
+    }
+
+
+    public static Intent createIntent(Context context, long categoryId, int month) {
+        final Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(INTENT_MONTH, month);
+        intent.putExtra(INTENT_CATEGORY_ID, categoryId);
+        return intent;
     }
 }
